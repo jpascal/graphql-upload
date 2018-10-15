@@ -10,6 +10,20 @@ go get github.com/jpascal/graphql-upload
 
 ## Usage
 
+```go
+	server := &http.Server{Addr: "0.0.0.0:5000", Handler: handler.New(func(request *handler.Request) interface{} {
+		return graphql.Do(graphql.Params{
+			RequestString:  request.Query,
+			OperationName:  request.OperationName,
+			VariableValues: request.Variables,
+			Schema:         schema.New(),
+			Context:        request.Context,
+		})
+	}),
+	}
+    server.ListenAndServe()
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/jpascal/graphql-upload/fork )
