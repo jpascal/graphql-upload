@@ -106,7 +106,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		result := self.Executor(&request)
 		if err := json.NewEncoder(w).Encode(result); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			panic(err)
 		}
 	} else if r.Method == "POST" {
 		contentType := strings.SplitN(r.Header.Get("Content-Type"), ";", 2)[0]
@@ -114,27 +114,25 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		switch contentType {
 		case "text/plain", "application/json":
 			if err := json.NewDecoder(r.Body).Decode(&operations); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				return
+				panic(err)
 			}
 		case "multipart/form-data":
 			// Parse multipart form
 			if err := r.ParseMultipartForm(self.MaxBodySize); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				return
+				panic(err)
 			}
 
 			// Unmarshal uploads
 			var uploads = map[File][]string{}
 			var uploadsMap = map[string][]string{}
 			if err := json.Unmarshal([]byte(r.Form.Get("map")), &uploadsMap); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				return
+				panic(err)
 			} else {
 				for key, path := range uploadsMap {
 					if file, header, err := r.FormFile(key); err != nil {
-						w.WriteHeader(http.StatusInternalServerError)
-						return
+						panic(err)
+						//w.WriteHeader(http.StatusInternalServerError)
+						//return
 					} else {
 						uploads[File{
 							File:     file,
@@ -147,8 +145,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			// Unmarshal operations
 			if err := json.Unmarshal([]byte(r.Form.Get("operations")), &operations); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				return
+				panic(err)
 			}
 
 			// set uploads to operations
@@ -172,7 +169,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 			request.Context = r.Context()
 			if err := json.NewEncoder(w).Encode(self.Executor(&request)); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
+				panic(err)
 			}
 		case []interface{}:
 			result := make([]interface{}, len(data))
@@ -192,7 +189,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				result[index] = self.Executor(&request)
 			}
 			if err := json.NewEncoder(w).Encode(result); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
+				panic(err)
 			}
 		default:
 			w.WriteHeader(http.StatusBadRequest)
