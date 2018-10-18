@@ -158,13 +158,13 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		switch data := operations.(type) {
 		case map[string]interface{}:
 			request := Request{}
-			if value, ok := data["operationName"]; ok {
+			if value, ok := data["operationName"]; ok && value != nil {
 				request.OperationName = value.(string)
 			}
-			if value, ok := data["query"]; ok {
+			if value, ok := data["query"]; ok && value != nil {
 				request.Query = value.(string)
 			}
-			if value, ok := data["variables"]; ok {
+			if value, ok := data["variables"]; ok && value != nil {
 				request.Variables = value.(map[string]interface{})
 			}
 			request.Context = r.Context()
