@@ -21,6 +21,8 @@ go get github.com/jpascal/graphql-upload
 			Schema:         schema.New(),
 			Context:        request.Context,
 		})
+	}, &handler.Config {
+		MaxBodySize: 1024
 	}),
 	}
     server.ListenAndServe()

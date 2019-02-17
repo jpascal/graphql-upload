@@ -102,6 +102,8 @@ func TestHandler(t *testing.T) {
 			Schema:         Schema(),
 			Context:        request.Context,
 		})
+	}, &Config{
+		MaxBodySize: 1024,
 	});
 	t.Run("GET Regular", func(t *testing.T) {
 		req, err := http.NewRequest("GET", "/", nil)

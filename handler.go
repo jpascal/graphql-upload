@@ -62,12 +62,16 @@ type File struct {
 	Size     int64
 }
 
+type Config struct {
+	MaxBodySize int64
+}
+
 type Executor func(request *Request) interface{}
 type Factory func(http.ResponseWriter, *http.Request) interface{}
 
-func New(executor Executor) *Handler {
+func New(executor Executor, config *Config) *Handler {
 	return &Handler{
-		MaxBodySize: 1024,
+		MaxBodySize: config.MaxBodySize,
 		Executor:    executor,
 	}
 }
