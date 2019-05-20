@@ -155,7 +155,9 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			// set uploads to operations
 			for file, paths := range uploads {
 				for _, path := range paths {
-					set(file, operations, path)
+					if err := set(file, operations, path); err != nil {
+						panic(err)
+					}
 				}
 			}
 		}
