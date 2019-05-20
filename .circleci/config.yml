@@ -4,6 +4,7 @@
 version: 2
 jobs:
   build:
+    resource_class: small
     docker:
     # specify the version
     - image: circleci/golang:1.9
