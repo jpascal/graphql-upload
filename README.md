@@ -1,6 +1,6 @@
 # graphql-upload
 
-[![CircleCI](https://img.shields.io/circleci/project/github/jpascal/graphql-upload/master.svg)](https://circleci.com/gh/jpascal/graphql-upload)
+[![GitHub Actions status](https://github.com/jpascal/graphql-upload/workflows/Go/badge.svg)](https://github.com/jpascal/graphql-upload/actions)
 
 Middleware and an [`Upload` scalar](#class-graphqlupload) to add support for [GraphQL multipart requests](https://github.com/jaydenseric/graphql-multipart-request-spec) (file uploads via queries and mutations) to various golang GraphQL servers.
 
