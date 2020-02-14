@@ -5,7 +5,6 @@
 Middleware and an [`Upload` scalar](#class-graphqlupload) to add support for [GraphQL multipart requests](https://github.com/jaydenseric/graphql-multipart-request-spec) (file uploads via queries and mutations) to various golang GraphQL servers.
 
 ## Installation
-````
 ```bash
 go get github.com/jpascal/graphql-upload
 ```
@@ -13,7 +12,9 @@ go get github.com/jpascal/graphql-upload
 ## Usage
 
 ```go
-	server := &http.Server{Addr: "0.0.0.0:5000", Handler: handler.New(func(request *handler.Request) interface{} {
+server := &http.Server{
+	Addr: "0.0.0.0:5000", 
+	Handler: handler.New(func(request *handler.Request) interface{} {
 		return graphql.Do(graphql.Params{
 			RequestString:  request.Query,
 			OperationName:  request.OperationName,
@@ -21,10 +22,8 @@ go get github.com/jpascal/graphql-upload
 			Schema:         schema.New(),
 			Context:        request.Context,
 		})
-	}, &handler.Config {
-		MaxBodySize: 1024
-	}),
-	}
+	}, &handler.Config {MaxBodySize: 1024}),
+}
     server.ListenAndServe()
 ```
 
