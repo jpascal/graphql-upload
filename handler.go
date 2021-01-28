@@ -82,7 +82,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var operations interface{}
 
 	if r.Method == "GET" {
-		request := Request{Context: r.Context()}
+		request := Request{Context: context.WithValue(r.Context(), "header", r.Header)}
 
 		// Get query
 		if value := r.URL.Query().Get("query"); len(value) == 0 {
@@ -173,7 +173,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if value, ok := data["variables"]; ok && value != nil {
 				request.Variables = value.(map[string]interface{})
 			}
-			request.Context = r.Context()
+			request.Context = context.WithValue(r.Context(), "header", r.Header)
 			if err := json.NewEncoder(w).Encode(self.Executor(&request)); err != nil {
 				panic(err)
 			}
@@ -191,7 +191,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if value, ok := data["variables"]; ok {
 					request.Variables = value.(map[string]interface{})
 				}
-				request.Context = r.Context()
+				request.Context = context.WithValue(r.Context(), "header", r.Header)
 				result[index] = self.Executor(&request)
 			}
 			if err := json.NewEncoder(w).Encode(result); err != nil {
