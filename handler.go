@@ -83,6 +83,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 		request := Request{Context: context.WithValue(r.Context(), "header", r.Header)}
+		request.Context = context.WithValue(request.Context, "remoteAddr", r.RemoteAddr)
 
 		// Get query
 		if value := r.URL.Query().Get("query"); len(value) == 0 {
@@ -174,6 +175,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				request.Variables = value.(map[string]interface{})
 			}
 			request.Context = context.WithValue(r.Context(), "header", r.Header)
+			request.Context = context.WithValue(request.Context, "remoteAddr", r.RemoteAddr)
 			if err := json.NewEncoder(w).Encode(self.Executor(&request)); err != nil {
 				panic(err)
 			}
@@ -192,6 +194,7 @@ func (self *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					request.Variables = value.(map[string]interface{})
 				}
 				request.Context = context.WithValue(r.Context(), "header", r.Header)
+				request.Context = context.WithValue(request.Context, "remoteAddr", r.RemoteAddr)
 				result[index] = self.Executor(&request)
 			}
 			if err := json.NewEncoder(w).Encode(result); err != nil {
